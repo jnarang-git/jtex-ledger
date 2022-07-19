@@ -1,0 +1,32 @@
+.contactContainer {
+  .sectionContainer {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 2rem 0 0.5rem;
+    font-size: 20px;
+    align-items: center;
+    .contactNameSection {
+      display: flex;
+      align-items: center;
+      .avatar {
+        border-radius: 50%;
+        background-color: green;
+        padding: 10px 18px;
+        margin: 0 10px;
+        color: white;
+      }
+      .contactName {
+      }
+    }
+    .amount {
+      font-size: 20px;
+    }
+  }
+}
+
+.green {
+  color: green;
+}
+.red {
+  color: red;
+}

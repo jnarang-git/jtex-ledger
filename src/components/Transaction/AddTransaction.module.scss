@@ -1,0 +1,39 @@
+.addTransactionLabel {
+  font-size: 1.5rem;
+  margin-right: 2rem;
+}
+
+.txnHeaderContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.field {
+  margin: 1rem 0;
+  width: 100%;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+.totalAmount {
+  font-size: 1rem;
+  margin-right: 1rem;
+}
+
+.flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
+}
