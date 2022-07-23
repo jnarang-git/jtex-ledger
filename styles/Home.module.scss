@@ -115,3 +115,24 @@
   }
 }
 
+.loginContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.accountPageContainer {
+  .headerContainer {
+    display: flex;
+    justify-content: space-between;
+    .logo {
+      margin-left: 1rem;
+    }
+  }
+}
+
+.summaryContainer {
+  display: flex;
+  flex-wrap: wrap;
+}

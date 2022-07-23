@@ -73,26 +73,42 @@ export default function Contact({
     >
       <section className={styles.sectionContainer}>
         <p className={styles.contactNameSection}>
-          <span className={styles.avatar}>A</span>
+          <span className={styles.avatar}>{contact?.properties?.title?.charAt(0)}</span>
           <span className={styles.contactName}>
             {contact?.properties?.title}
           </span>
         </p>
         <p
           className={`${styles.amount} ${
-            totalAmount >= 0 ? styles.green : styles.red
+            totalAmount
+              ? totalAmount >= 0
+                ? styles.red
+                : styles.green
+              : styles.grey
           }`}
         >
-          {totalAmount}
+          {totalAmount > 0 ? (
+            <p>
+              <span>{Math.abs(totalAmount)}</span>
+              <sub>(Dena)</sub>
+            </p>
+          ) : (
+            (
+              <p>
+                <span>{Math.abs(totalAmount)}</span>
+                <sub>(Lena)</sub>
+              </p>
+            ) || "No dues"
+          )}
         </p>
-        <div
+        {/* <div
           onClick={(e) => {
             e.stopPropagation();
             handleDeleteSheet();
           }}
         >
           <DeleteIcon />
-        </div>
+        </div> */}
       </section>
     </main>
   );

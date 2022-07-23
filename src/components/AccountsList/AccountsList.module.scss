@@ -1,0 +1,31 @@
+.createNewAccount {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+}
+.field {
+  margin: 1rem 0;
+  width: 100%;
+}
+.green {
+  color: green;
+}
+.red {
+  color: red;
+}
+.addCustomerContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .addCustomerButton {
+    margin-right: 1rem;
+  }
+  .addCustomerLabel {
+    margin-left: 0.5rem;
+  }
+}
+.accountsLabel {
+  font-size: 1.8rem;
+  margin-left: 1rem;
+}

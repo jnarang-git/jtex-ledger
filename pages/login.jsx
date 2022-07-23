@@ -1,9 +1,9 @@
-import { useSession, signIn, signOut } from "next-auth/react";
+import { Button } from "@mui/material";
+import { getProviders, signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-
-export default function Login() {
+import styles from "../styles/Home.module.scss";
+export default function Login({ providers }) {
   const { data: session } = useSession();
-  console.log("sess", session);
   const router = useRouter();
   if (session) {
     router.push("/accounts");
@@ -15,9 +15,20 @@ export default function Login() {
     );
   }
   return (
-    <>
-      Not signed in <br />
-      <button onClick={() => signIn()}>Sign in</button>
-    </>
+    <div className={styles.loginContainer}>
+      {providers &&
+        Object.values(providers)?.map(({ id, name }) => (
+          <Button variant="contained" onClick={() => signIn(id)}>
+            {`Sign in with ${name}`}
+          </Button>
+        ))}
+    </div>
   );
+}
+
+export async function getServerSideProps({ res }) {
+  const providers = await getProviders();
+  return {
+    props: { providers }, // will be passed to the page component as props
+  };
 }

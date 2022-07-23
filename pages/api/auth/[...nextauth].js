@@ -1,17 +1,29 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
-const SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"];
+let SCOPES = [];
+SCOPES.push("https://www.googleapis.com/auth/drive");
+SCOPES.push("https://www.googleapis.com/auth/spreadsheets");
+let a = SCOPES.join(" ");
+console.log(a);
+const clientId =
+  "1061389835335-084ce2v3bo3mlh64o6do3ldnbe21aqc5.apps.googleusercontent.com";
+const clientSecret = "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";
+
 export default NextAuth({
   providers: [
     GoogleProvider({
-      clientId:
-        "1061389835335-084ce2v3bo3mlh64o6do3ldnbe21aqc5.apps.googleusercontent.com",
-      clientSecret: "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",
-      scope:
-        "https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/business.manage",
-      //   "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/business.manage",
-      // authorizationUrl: "https://accounts.google.com/o/oauth2/auth",
+      clientId: clientId,
+      clientSecret: clientSecret,
+      authorization: {
+        params: {
+          scope:
+            "openid email profile https://www.googleapis.com/auth/spreadsheets",
+          //       // prompt: "consent",
+          //       // access_type: "offline",
+          //       // response_type: "code",
+        },
+      },
     }),
   ],
   // session: { jwt: true },

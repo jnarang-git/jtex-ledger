@@ -23,9 +23,7 @@ export default function AddTransaction({
   setAccountBalanceDetails,
 }) {
   const { data: session } = useSession();
-  const token =
-    "ya29.A0AVA9y1tAn5TOmUjXQE5oZ0P7syscBFJAGb6WX9IscoJT8QR4Upwo8xmfprgg8uFd69pTxN6jSVSfCplXbJQ2wsxrvPLUlFrAWuRXGTmjs4jBkBWUKPTwUQNCpOkE1b6RRlkWj_2nw-gZt18_xH9UwC9M4TvpYUNnWUtBVEFTQVRBU0ZRRTY1ZHI4cHFjbFVadlNqM2txSHZjdEhMREJuUQ0163" ??
-    session?.accessToken;
+  const token = session?.accessToken;
   const [isModalOpen, toggleModal] = React.useState(false);
   const [totalAmount, setTotalAmount] = React.useState("");
   const [txns, setTxns] = React.useState([]);
@@ -39,7 +37,7 @@ export default function AddTransaction({
 
   React.useEffect(() => {
     const tableRows = txns?.map((txn, index) => {
-      return { id: index, date: txn[0], amount: txn[1], billNumber: txn[2] };
+      return { id: index, date: txn[0], amount: txn[1], billNumber: txn[2] || "Cash" };
     });
     setRows(tableRows ?? []);
   }, [txns]);
