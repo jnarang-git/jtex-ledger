@@ -14,7 +14,11 @@ export default function Login({ providers }) {
     <div className={styles.loginContainer}>
       {providers &&
         Object.values(providers)?.map(({ id, name }) => (
-          <Button variant="contained" onClick={() => signIn(id)}>
+          <Button
+            key={id}
+            variant="contained"
+            onClick={() => signIn(id)}
+          >
             {`Sign in with ${name}`}
           </Button>
         ))}
