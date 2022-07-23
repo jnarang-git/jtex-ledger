@@ -5,14 +5,10 @@ import styles from "../styles/Home.module.scss";
 export default function Login({ providers }) {
   const { data: session } = useSession();
   const router = useRouter();
+  console.log("session", session);
   if (session) {
     router.push("/accounts");
-    return (
-      <>
-        Signed in as {session.user.email} <br />
-        <button onClick={() => signOut()}>Sign out</button>
-      </>
-    );
+    return null;
   }
   return (
     <div className={styles.loginContainer}>

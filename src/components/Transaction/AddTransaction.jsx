@@ -1,22 +1,22 @@
-import * as React from "react";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import { InputAdornment } from "@mui/material";
+import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
-import Transaction from "./Transaction";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
-import CustomModal from "../Modal/Modal";
-import styles from "./AddTransaction.module.scss";
-import Button from "@mui/material/Button";
 import axios from "axios";
 import { format } from "date-fns";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { useRouter } from "next/router";
-import DataGridTable from "../common/Datagrid/Datagrid";
 import { useSession } from "next-auth/react";
-
+import { useRouter } from "next/router";
+import * as React from "react";
+import DataGridTable from "../common/Datagrid/Datagrid";
+import CustomModal from "../Modal/Modal";
+import styles from "./AddTransaction.module.scss";
 export default function AddTransaction({
   sheetName,
   accountBalanceDetails,
@@ -34,10 +34,20 @@ export default function AddTransaction({
   const [txnType, setTxnType] = React.useState("");
   const router = useRouter();
   const spreadsheetsId = "1TJrZaCqRLxjdTI085mMR1q20UotXoGyUkl2_yc91bBo";
+  const accountNameRef = React.useRef();
+
+  React.useEffect(() => {
+    accountNameRef?.current?.focus();
+  }, []);
 
   React.useEffect(() => {
     const tableRows = txns?.map((txn, index) => {
-      return { id: index, date: txn[0], amount: txn[1], billNumber: txn[2] || "Cash" };
+      return {
+        id: index,
+        date: txn[0],
+        amount: txn[1],
+        billNumber: txn[2] || "Cash",
+      };
     });
     setRows(tableRows ?? []);
   }, [txns]);
@@ -73,27 +83,31 @@ export default function AddTransaction({
 
   async function handleAddTxn() {
     if (txnAmount && txnDate) {
-      await axios.post(
-        `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetsId}/values/${sheetName}!A2:C:append?valueInputOption=USER_ENTERED`,
-        {
-          majorDimension: "ROWS",
-          range: `${sheetName}!A2:C`,
-          values: [
-            [
-              format(txnDate, "dd-MMM-yy"),
-              txnType === "add" ? txnAmount : -txnAmount,
-              billNumber,
+      await axios
+        .post(
+          `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetsId}/values/${sheetName}!A2:C:append?valueInputOption=USER_ENTERED`,
+          {
+            majorDimension: "ROWS",
+            range: `${sheetName}!A2:C`,
+            values: [
+              [
+                format(txnDate, "dd-MMM-yy"),
+                txnType === "add" ? txnAmount : -txnAmount,
+                billNumber,
+              ],
             ],
-          ],
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
           },
-        }
-      );
-      toggleModal(false);
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((res) => res.data);
       setTxnAmount("");
+
+      toggleModal(false);
+
       getAmount();
     }
   }
@@ -123,7 +137,7 @@ export default function AddTransaction({
           <div onClick={() => router.push("/accounts")}>
             <ArrowBackIcon />
           </div>
-          <p className={styles.addTransactionLabel}>{sheetName}</p>
+          <p className={styles.addTransactionLabel}>Trasanctions</p>
         </div>
         <div className={styles.actions}>
           {totalAmount && (
@@ -175,10 +189,17 @@ export default function AddTransaction({
             </Stack>
           </LocalizationProvider>
           <TextField
+            ref={accountNameRef}
             className={styles.field}
             id="outlined-number"
             label="Amount"
             type="number"
+            autoComplete="off"
+            startAdornment={
+              <InputAdornment position="start">
+                <CurrencyRupeeIcon />
+              </InputAdornment>
+            }
             value={txnAmount}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
@@ -197,6 +218,7 @@ export default function AddTransaction({
             id="outlined-number"
             label="Bill Number"
             type="number"
+            autoComplete="off"
             value={billNumber}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
@@ -215,6 +237,7 @@ export default function AddTransaction({
           </Button>
           &nbsp; &nbsp;
           <Button
+            disabled={!txnAmount?.length}
             variant="contained"
             onClick={() => {
               handleAddTxn();

@@ -41,38 +41,42 @@ export default function AccountsList({ firmBalance, setFirmBalance }) {
   }
 
   async function handleAddAcount() {
-    await axios.post(
-      `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetsId}:batchUpdate`,
-      {
-        requests: [
-          {
-            addSheet: {
-              properties: {
-                title: accountName,
+    await axios
+      .post(
+        `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetsId}:batchUpdate`,
+        {
+          requests: [
+            {
+              addSheet: {
+                properties: {
+                  title: accountName,
+                },
               },
             },
+          ],
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        ],
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
+        }
+      )
+      .catch((err) => {});
+    await axios
+      .post(
+        `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetsId}/values/${accountName}!A:C:append?valueInputOption=USER_ENTERED`,
+        {
+          majorDimension: "ROWS",
+          range: `${accountName}!A:C`,
+          values: [["Date", "Amount", "Bill Number"]],
         },
-      }
-    );
-    await axios.post(
-      `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetsId}/values/${accountName}!A:C:append?valueInputOption=USER_ENTERED`,
-      {
-        majorDimension: "ROWS",
-        range: `${accountName}!A:C`,
-        values: [["Date", "Amount", "Bill Number"]],
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .catch(() => {});
 
     toggleModal(false);
     setAccountName("");
@@ -105,17 +109,22 @@ export default function AccountsList({ firmBalance, setFirmBalance }) {
         />
       ))}
       {isModalOpen && (
-        <CustomModal isModalOpen={isModalOpen} toggleModal={toggleModal}>
+        <CustomModal
+          isModalOpen={isModalOpen}
+          toggleModal={toggleModal}
+          heading="Add Account"
+        >
           <TextField
             className={styles.field}
             id="outlined-number"
             label="Account name"
+            autoComplete="off"
             value={accountName}
             onChange={(e) => {
               setAccountName(e.target.value);
             }}
             onKeyDown={(e) => {
-              if (e.key === "Enter") {
+              if (accountName?.length && e.key === "Enter") {
                 handleAddAcount();
               }
             }}
@@ -134,6 +143,7 @@ export default function AccountsList({ firmBalance, setFirmBalance }) {
           </Button>
           &nbsp; &nbsp;
           <Button
+            disabled={!accountName?.length}
             variant="contained"
             onClick={() => {
               handleAddAcount();

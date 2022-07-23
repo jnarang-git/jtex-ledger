@@ -5,7 +5,6 @@ import "poppins";
 export default function Home() {
   const router = useRouter();
   const { data: session } = useSession();
-  console.log("sess", session);
   useEffect(() => {
     if (session) {
       router.push("/accounts");

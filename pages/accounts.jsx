@@ -12,11 +12,6 @@ export default function AccountsPage() {
   const router = useRouter();
   const [firmBalance, setFirmBalance] = React.useState(0);
 
-  React.useEffect(() => {
-    if (!session) {
-      router.push("login");
-    }
-  }, [session]);
   return (
     <div className={styles.accountPageContainer}>
       <div className={styles.headerContainer}>
@@ -41,6 +36,11 @@ export default function AccountsPage() {
         <SummaryButton
           topLabel={firmBalance}
           bottomLabel="Net Amount"
+          color="#bfd2db"
+        />{" "}
+        <SummaryButton
+          topLabel={firmBalance}
+          bottomLabel="This week sale"
           color="#bfd2db"
         />
       </div>
