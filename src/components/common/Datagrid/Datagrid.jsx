@@ -1,6 +1,7 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
+import { Stack } from "@mui/material";
 
 export default function DataGridTable({ rows, columns }) {
   return (
@@ -15,7 +16,13 @@ export default function DataGridTable({ rows, columns }) {
         disableColumnFilter
         disableColumnMenu
         disableColumnSelector
-        
+        components={{
+          NoRowsOverlay: () => (
+            <Stack height="100%" alignItems="center" justifyContent="center">
+              No Records Found
+            </Stack>
+          ),
+        }}
       />
     </Box>
   );

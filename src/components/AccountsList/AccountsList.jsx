@@ -50,9 +50,16 @@ export default function AccountsList({
         );
 
         const a = [cashSheet];
-        const filteredSheets = res?.sheets?.filter(
-          (sheet) => sheet.properties.title !== "CASH"
-        );
+        const filteredSheets = res?.sheets
+          ?.filter((sheet) => sheet.properties.title !== "CASH")
+          ?.sort(function (a, b) {
+            if (b["properties"]["index"] < a["properties"]["index"]) {
+              return -1;
+            } else if (b["properties"]["index"] > a["properties"]["index"]) {
+              return 1;
+            }
+            return 0;
+          });
 
         setAccounts([...a, ...filteredSheets]);
         setFilteredAccounts([...a, ...filteredSheets]);
@@ -120,6 +127,9 @@ export default function AccountsList({
         <p className={styles.accountsLabel}>Accounts</p>
         <Button
           size="large"
+          style={{
+            backgroundColor: "#5d5da1",
+          }}
           variant="contained"
           className={styles.addCustomerButton}
           onClick={() => {
@@ -186,6 +196,9 @@ export default function AccountsList({
                 onClick={() => {
                   toggleModal(false);
                   setAccountName("");
+                }}
+                style={{
+                  backgroundColor: "#5d5da1",
                 }}
               >
                 Cancel

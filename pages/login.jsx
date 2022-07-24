@@ -15,6 +15,9 @@ export default function Login({ providers }) {
         Object.values(providers)?.map(({ id, name }) => (
           <Button
             key={id}
+            style={{
+              backgroundColor: "#5d5da1",
+            }}
             variant="contained"
             onClick={() => signIn(id)}
           >

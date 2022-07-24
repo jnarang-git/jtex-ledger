@@ -253,7 +253,13 @@ export default function AddTransaction({
               }}
             />
             <Stack spacing={2} direction="row">
-              <Button variant="contained" onClick={() => toggleModal(false)}>
+              <Button
+                variant="contained"
+                style={{
+                  backgroundColor: "#5d5da1",
+                }}
+                onClick={() => toggleModal(false)}
+              >
                 Cancel
               </Button>
               &nbsp; &nbsp;

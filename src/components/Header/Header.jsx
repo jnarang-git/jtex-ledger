@@ -57,7 +57,13 @@ export default function Header() {
           aria-haspopup="true"
           onClick={handleToggle}
         >
-          <Avatar>J</Avatar>
+          <Avatar
+            sx={{
+              bgcolor: "#5d5da1",
+            }}
+          >
+            J
+          </Avatar>
         </Button>
         <Popper
           open={open}
@@ -75,7 +81,11 @@ export default function Header() {
                   placement === "bottom-start" ? "left top" : "left bottom",
               }}
             >
-              <Paper>
+              <Paper
+                sx={{
+                  backgroundColor: "#5d5da1",
+                }}
+              >
                 <ClickAwayListener onClickAway={handleClose}>
                   <MenuList
                     autoFocusItem={open}

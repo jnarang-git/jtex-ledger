@@ -11,16 +11,22 @@ export default function SearchBar({ handleAccountSearch }) {
   return (
     <Paper
       //   component="form"
-      sx={{ p: "2px 4px", display: "flex", alignItems: "center" }}
+      sx={{
+        p: "2px 4px",
+        display: "flex",
+        alignItems: "center",
+        backgroundColor: "#5d5da1",
+      }}
     >
       <InputBase
         sx={{ ml: 1, flex: 1 }}
         placeholder="Search account"
-        inputProps={{ "aria-label": "search google maps" }}
+        inputProps={{
+          "aria-label": "search google maps",
+        }}
         onChange={(e) => {
           handleAccountSearch(e.target.value);
         }}
-        onFocus={() => {}}
       />
       <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
         <SearchIcon />
