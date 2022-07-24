@@ -174,77 +174,81 @@ export default function AddTransaction({
       <DataGridTable rows={rows} columns={columns} checkboxSelection={false} />;
       {isModalOpen && (
         <CustomModal isModalOpen={isModalOpen} toggleModal={toggleModal}>
-          <LocalizationProvider
-            dateAdapter={AdapterDateFns}
-            className={styles.field}
-          >
-            <Stack spacing={3}>
-              <MobileDatePicker
-                label="Date"
-                inputFormat="MM/dd/yyyy"
-                value={txnDate}
-                onChange={handleChange}
-                renderInput={(params) => <TextField {...params} />}
-              />
+          <Stack spacing={2} direction="column">
+            <LocalizationProvider
+              dateAdapter={AdapterDateFns}
+              className={styles.field}
+            >
+              <Stack spacing={3}>
+                <MobileDatePicker
+                  label="Date"
+                  inputFormat="MM/dd/yyyy"
+                  value={txnDate}
+                  onChange={handleChange}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </Stack>
+            </LocalizationProvider>
+            <TextField
+              ref={accountNameRef}
+              className={styles.field}
+              id="outlined-number"
+              label="Amount"
+              type="number"
+              autoComplete="off"
+              startAdornment={
+                <InputAdornment position="start">
+                  <CurrencyRupeeIcon />
+                </InputAdornment>
+              }
+              value={txnAmount}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleAddTxn();
+                }
+              }}
+              onChange={(e) => {
+                setTxnAmount(e.target.value);
+              }}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+            <TextField
+              className={styles.field}
+              id="outlined-number"
+              label="Bill Number"
+              type="number"
+              autoComplete="off"
+              value={billNumber}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleAddTxn();
+                }
+              }}
+              onChange={(e) => {
+                setBillNumber(e.target.value);
+              }}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+            <Stack spacing={2} direction="row">
+              <Button variant="contained" onClick={() => toggleModal(false)}>
+                Cancel
+              </Button>
+              &nbsp; &nbsp;
+              <Button
+                disabled={!txnAmount?.length}
+                variant="contained"
+                onClick={() => {
+                  handleAddTxn();
+                }}
+              >
+                Add
+              </Button>
             </Stack>
-          </LocalizationProvider>
-          <TextField
-            ref={accountNameRef}
-            className={styles.field}
-            id="outlined-number"
-            label="Amount"
-            type="number"
-            autoComplete="off"
-            startAdornment={
-              <InputAdornment position="start">
-                <CurrencyRupeeIcon />
-              </InputAdornment>
-            }
-            value={txnAmount}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleAddTxn();
-              }
-            }}
-            onChange={(e) => {
-              setTxnAmount(e.target.value);
-            }}
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-          <TextField
-            className={styles.field}
-            id="outlined-number"
-            label="Bill Number"
-            type="number"
-            autoComplete="off"
-            value={billNumber}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleAddTxn();
-              }
-            }}
-            onChange={(e) => {
-              setBillNumber(e.target.value);
-            }}
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-          <Button variant="contained" onClick={() => toggleModal(false)}>
-            Cancel
-          </Button>
-          &nbsp; &nbsp;
-          <Button
-            disabled={!txnAmount?.length}
-            variant="contained"
-            onClick={() => {
-              handleAddTxn();
-            }}
-          >
-            Add
-          </Button>
+          </Stack>
         </CustomModal>
       )}
     </div>

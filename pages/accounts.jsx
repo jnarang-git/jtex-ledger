@@ -11,6 +11,7 @@ export default function AccountsPage() {
   const { data: session } = useSession();
   const router = useRouter();
   const [firmBalance, setFirmBalance] = React.useState(0);
+  const [monthSale, setMonthSale] = React.useState(0);
 
   return (
     <div className={styles.accountPageContainer}>
@@ -23,28 +24,31 @@ export default function AccountsPage() {
       <div className={styles.summaryContainer}>
         <SummaryButton
           topLabel="0"
-          bottomLabel="To Collect"
+          bottomLabel="LENE HAI"
           color="#b7deb7"
           downArrayIcon
         />
         <SummaryButton
           topLabel="0"
-          bottomLabel="Recieved"
+          bottomLabel="DENE HAI"
           color="#e3c1c1"
           upArrowIcon
         />
         <SummaryButton
           topLabel={firmBalance}
-          bottomLabel="Net Amount"
-          color="#bfd2db"
+          bottomLabel="Net Balance"
+          color={firmBalance > 0 ? "#b7deb7" : "#e3c1c1"}
         />{" "}
         <SummaryButton
-          topLabel={firmBalance}
+          topLabel={monthSale}
           bottomLabel="This week sale"
-          color="#bfd2db"
+          color={monthSale >= 200000 ? "#b7deb7" : "#e3c1c1"}
         />
       </div>
-      <AccountsList setFirmBalance={setFirmBalance} />
+      <AccountsList
+        setFirmBalance={setFirmBalance}
+        setMonthSale={setMonthSale}
+      />
     </div>
   );
 }

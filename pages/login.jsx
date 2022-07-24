@@ -5,7 +5,6 @@ import styles from "../styles/Home.module.scss";
 export default function Login({ providers }) {
   const { data: session } = useSession();
   const router = useRouter();
-  console.log("session", session);
   if (session) {
     router.push("/accounts");
     return null;

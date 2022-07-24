@@ -5,7 +5,6 @@ let SCOPES = [];
 SCOPES.push("https://www.googleapis.com/auth/drive");
 SCOPES.push("https://www.googleapis.com/auth/spreadsheets");
 let a = SCOPES.join(" ");
-console.log(a);
 const clientId =
   "1061389835335-084ce2v3bo3mlh64o6do3ldnbe21aqc5.apps.googleusercontent.com";
 const clientSecret = "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";

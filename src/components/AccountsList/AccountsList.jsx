@@ -1,22 +1,23 @@
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import { Button, TextField } from "@mui/material";
+import { Button, Stack, TextField } from "@mui/material";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import * as React from "react";
+import SearchBar from "../common/SearchBar/SearchBar";
 import Contact from "../Contact/Contact";
 import CustomModal from "../Modal/Modal";
 import styles from "./AccountsList.module.scss";
 
-export default function AccountsList({ firmBalance, setFirmBalance }) {
+export default function AccountsList({ setFirmBalance, setMonthSale }) {
   const { data: session } = useSession();
   const token = session?.accessToken;
   const [accounts, setAccounts] = React.useState([]);
+  const [filteredAccounts, setFilteredAccounts] = React.useState([]);
   const [isModalOpen, toggleModal] = React.useState(false);
   const [accountName, setAccountName] = React.useState("");
   const [accountsBalances, setAccountsBalances] = React.useState([]);
-  console.log("accountsBalances", accountsBalances);
+  const [accountsTxns, setAccountsTxns] = React.useState([]);
   const spreadsheetsId = "1TJrZaCqRLxjdTI085mMR1q20UotXoGyUkl2_yc91bBo";
-
   React.useEffect(() => {
     getAccounts();
   }, []);
@@ -37,11 +38,23 @@ export default function AccountsList({ firmBalance, setFirmBalance }) {
         },
       })
       .then((res) => res.data)
-      .then((res) => setAccounts(res?.sheets));
+      .then((res) => {
+        const cashSheet = res?.sheets?.find(
+          (obj) => obj.properties.title === "CASH"
+        );
+
+        const a = [cashSheet];
+        const filteredSheets = res?.sheets?.filter(
+          (sheet) => sheet.properties.title !== "CASH"
+        );
+
+        setAccounts([...a, ...filteredSheets]);
+        setFilteredAccounts([...a, ...filteredSheets]);
+      });
   }
 
   async function handleAddAcount() {
-    await axios
+    const addSheetResponse = await axios
       .post(
         `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetsId}:batchUpdate`,
         {
@@ -62,51 +75,69 @@ export default function AccountsList({ firmBalance, setFirmBalance }) {
         }
       )
       .catch((err) => {});
-    await axios
-      .post(
-        `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetsId}/values/${accountName}!A:C:append?valueInputOption=USER_ENTERED`,
-        {
-          majorDimension: "ROWS",
-          range: `${accountName}!A:C`,
-          values: [["Date", "Amount", "Bill Number"]],
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
+    if (addSheetResponse?.spreadsheetsId)
+      await axios
+        .post(
+          `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetsId}/values/${accountName}!A:C:append?valueInputOption=USER_ENTERED`,
+          {
+            majorDimension: "ROWS",
+            range: `${accountName}!A:C`,
+            values: [["Date", "Amount", "Bill Number"]],
           },
-        }
-      )
-      .catch(() => {});
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .catch(() => {});
 
     toggleModal(false);
     setAccountName("");
     getAccounts();
   }
 
+  function handleAccountSearch(searchTerm) {
+    setFilteredAccounts(
+      searchTerm?.length
+        ? filteredAccounts?.filter((accnt) =>
+            accnt?.properties?.title
+              ?.toLowerCase()
+              ?.includes(searchTerm?.toLowerCase())
+          )
+        : accounts
+    );
+  }
   return (
     <main className={styles.homepageContainer}>
       <div className={styles.addCustomerContainer}>
         <p className={styles.accountsLabel}>Accounts</p>
         <Button
-          size="small"
+          size="large"
+          variant="contained"
           className={styles.addCustomerButton}
           onClick={() => {
             toggleModal(true);
           }}
         >
           <PersonAddIcon />
-          <p className={styles.addCustomerLabel}>Add Acount</p>
+          {/* <p className={styles.addCustomerLabel}>Add</p> */}
         </Button>
       </div>
-      {accounts?.map((contact) => (
-        <Contact
-          key={contact?.properties?.sheetId}
-          contact={contact}
-          spreadsheetsId={spreadsheetsId}
-          token={token}
-          getAccounts={getAccounts}
-          setAccountsBalances={setAccountsBalances}
-        />
+      <SearchBar handleAccountSearch={handleAccountSearch} />
+      {filteredAccounts?.map((contact, index) => (
+        <Stack spacing={2} direction="column">
+          <Contact
+            index={index}
+            key={contact?.properties?.sheetId}
+            contact={contact}
+            spreadsheetsId={spreadsheetsId}
+            token={token}
+            getAccounts={getAccounts}
+            setAccountsBalances={setAccountsBalances}
+            setAccountsTxns={setAccountsTxns}
+          />
+        </Stack>
       ))}
       {isModalOpen && (
         <CustomModal
@@ -114,43 +145,47 @@ export default function AccountsList({ firmBalance, setFirmBalance }) {
           toggleModal={toggleModal}
           heading="Add Account"
         >
-          <TextField
-            className={styles.field}
-            id="outlined-number"
-            label="Account name"
-            autoComplete="off"
-            value={accountName}
-            onChange={(e) => {
-              setAccountName(e.target.value);
-            }}
-            onKeyDown={(e) => {
-              if (accountName?.length && e.key === "Enter") {
-                handleAddAcount();
-              }
-            }}
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-          <Button
-            variant="contained"
-            onClick={() => {
-              toggleModal(false);
-              setAccountName("");
-            }}
-          >
-            Cancel
-          </Button>
-          &nbsp; &nbsp;
-          <Button
-            disabled={!accountName?.length}
-            variant="contained"
-            onClick={() => {
-              handleAddAcount();
-            }}
-          >
-            Add
-          </Button>
+          <Stack spacing={2} direction="column">
+            <TextField
+              className={styles.field}
+              id="outlined-number"
+              label="Account name"
+              autoComplete="off"
+              value={accountName}
+              onChange={(e) => {
+                setAccountName(e.target.value);
+              }}
+              onKeyDown={(e) => {
+                if (accountName?.length && e.key === "Enter") {
+                  handleAddAcount();
+                }
+              }}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+            <Stack spacing={2} direction="row">
+              <Button
+                variant="contained"
+                onClick={() => {
+                  toggleModal(false);
+                  setAccountName("");
+                }}
+              >
+                Cancel
+              </Button>
+              &nbsp; &nbsp;
+              <Button
+                disabled={!accountName?.length}
+                variant="contained"
+                onClick={() => {
+                  handleAddAcount();
+                }}
+              >
+                Add
+              </Button>
+            </Stack>
+          </Stack>
         </CustomModal>
       )}
     </main>
