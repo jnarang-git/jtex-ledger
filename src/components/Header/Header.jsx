@@ -11,7 +11,7 @@ import { Avatar } from "@mui/material";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 
-export default function Header() {
+export default function Header({ name }) {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
   const router = useRouter();
@@ -62,7 +62,7 @@ export default function Header() {
               bgcolor: "#5d5da1",
             }}
           >
-            J
+            {name?.charAt(0)}
           </Avatar>
         </Button>
         <Popper

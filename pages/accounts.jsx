@@ -1,3 +1,4 @@
+import { useSession } from "next-auth/react";
 import * as React from "react";
 import AccountsList from "../src/components/AccountsList/AccountsList";
 import Header from "../src/components/Header/Header";
@@ -8,7 +9,8 @@ export default function AccountsPage() {
   const [toCollect, setToCollect] = React.useState(0);
   const [toPay, setToPay] = React.useState(0);
   const [monthSale, setMonthSale] = React.useState(0);
-
+  const { data: session } = useSession();
+  console.log(session);
   return (
     <div className={styles.accountPageContainer}>
       <div className={styles.headerContainer}>
@@ -16,7 +18,7 @@ export default function AccountsPage() {
           {/* <Image src={Logo} width="120" height="50" /> */}
           E-Khata
         </p>
-        <Header />
+        <Header name={session?.user?.name} />
       </div>
       <div
         className={`${styles.summaryContainer} ${
