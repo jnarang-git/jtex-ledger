@@ -1,7 +1,6 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
+import { Stack, Typography } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import styles from "./Modal.module.scss";
 const style = {
@@ -13,6 +12,7 @@ const style = {
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
+  backgroundColor: "#29295e",
   p: 4,
 };
 
@@ -34,15 +34,17 @@ export default function CustomModal({
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography
-            id="modal-modal-title"
-            variant="h6"
-            component="h2"
-            className={styles.heading}
-          >
-            {heading}
-          </Typography>
-          {children}
+          <Stack spacing={2} direction="column">
+            <Typography
+              id="modal-modal-title"
+              variant="h6"
+              component="h2"
+              className={styles.heading}
+            >
+              {heading}
+            </Typography>
+            {children}
+          </Stack>
         </Box>
       </Modal>
     </div>

@@ -1,5 +1,6 @@
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import { Button, Stack, TextField } from "@mui/material";
+import { Button, Stack } from "@mui/material";
+import TextField from "../common/TextField";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import * as React from "react";
@@ -8,7 +9,12 @@ import Contact from "../Contact/Contact";
 import CustomModal from "../Modal/Modal";
 import styles from "./AccountsList.module.scss";
 
-export default function AccountsList({ setFirmBalance, setMonthSale }) {
+export default function AccountsList({
+  setFirmBalance,
+  setMonthSale,
+  setToPay,
+  setToCollect,
+}) {
   const { data: session } = useSession();
   const token = session?.accessToken;
   const [accounts, setAccounts] = React.useState([]);
@@ -125,23 +131,29 @@ export default function AccountsList({ setFirmBalance, setMonthSale }) {
         </Button>
       </div>
       <SearchBar handleAccountSearch={handleAccountSearch} />
-      {filteredAccounts?.map((contact, index) => (
-        <Stack
-          key={contact?.properties?.sheetId}
-          spacing={2}
-          direction="column"
-        >
-          <Contact
-            index={index}
-            contact={contact}
-            spreadsheetsId={spreadsheetsId}
-            token={token}
-            getAccounts={getAccounts}
-            setAccountsBalances={setAccountsBalances}
-            setAccountsTxns={setAccountsTxns}
-          />
-        </Stack>
-      ))}
+      {filteredAccounts?.length ? (
+        filteredAccounts?.map((contact, index) => (
+          <Stack
+            key={contact?.properties?.sheetId}
+            spacing={2}
+            direction="column"
+          >
+            <Contact
+              index={index}
+              contact={contact}
+              spreadsheetsId={spreadsheetsId}
+              token={token}
+              getAccounts={getAccounts}
+              setAccountsBalances={setAccountsBalances}
+              setToCollect={setToCollect}
+              setToPay={setToPay}
+              setAccountsTxns={setAccountsTxns}
+            />
+          </Stack>
+        ))
+      ) : (
+        <p className={styles.noRecordFound}>Sorry! No accounts found</p>
+      )}
       {isModalOpen && (
         <CustomModal
           isModalOpen={isModalOpen}
@@ -165,6 +177,7 @@ export default function AccountsList({ setFirmBalance, setMonthSale }) {
               }}
               InputLabelProps={{
                 shrink: true,
+                style: { color: "#fff" },
               }}
             />
             <Stack spacing={2} direction="row">

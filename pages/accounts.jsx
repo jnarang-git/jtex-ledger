@@ -1,16 +1,12 @@
-import { useSession } from "next-auth/react";
-import Image from "next/image";
-import { useRouter } from "next/router";
 import * as React from "react";
-import Logo from "../public/logo.png";
 import AccountsList from "../src/components/AccountsList/AccountsList";
 import Header from "../src/components/Header/Header";
 import SummaryButton from "../src/components/SummarButton/SummaryButton";
 import styles from "../styles/Home.module.scss";
 export default function AccountsPage() {
-  const { data: session } = useSession();
-  const router = useRouter();
   const [firmBalance, setFirmBalance] = React.useState(0);
+  const [toCollect, setToCollect] = React.useState(0);
+  const [toPay, setToPay] = React.useState(0);
   const [monthSale, setMonthSale] = React.useState(0);
 
   return (
@@ -22,15 +18,19 @@ export default function AccountsPage() {
         </p>
         <Header />
       </div>
-      <div className={styles.summaryContainer}>
+      <div
+        className={`${styles.summaryContainer} ${
+          false ? styles.show : styles.hide
+        }`}
+      >
         <SummaryButton
-          topLabel="0"
+          topLabel={toCollect}
           bottomLabel="LENE HAI"
           color="#b7deb7"
           downArrayIcon
         />
         <SummaryButton
-          topLabel="0"
+          topLabel={toPay}
           bottomLabel="DENE HAI"
           color="#e3c1c1"
           upArrowIcon
@@ -49,6 +49,8 @@ export default function AccountsPage() {
       <AccountsList
         setFirmBalance={setFirmBalance}
         setMonthSale={setMonthSale}
+        setToCollect={setToCollect}
+        setToPay={setToPay}
       />
     </div>
   );

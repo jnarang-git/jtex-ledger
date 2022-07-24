@@ -20,6 +20,7 @@ export default function SearchBar({ handleAccountSearch }) {
         onChange={(e) => {
           handleAccountSearch(e.target.value);
         }}
+        onFocus={() => {}}
       />
       <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
         <SearchIcon />

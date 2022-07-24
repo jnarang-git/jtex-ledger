@@ -5,7 +5,7 @@ import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import { InputAdornment } from "@mui/material";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
-import TextField from "@mui/material/TextField";
+import TextField from "../common/TextField";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
@@ -140,7 +140,7 @@ export default function AddTransaction({
           <p className={styles.addTransactionLabel}>Trasanctions</p>
         </div>
         <div className={styles.actions}>
-          {totalAmount && (
+          {/* {totalAmount && (
             <p
               className={`${styles.totalAmount} ${
                 totalAmount >= 0 ? styles.green : styles.red
@@ -148,8 +148,8 @@ export default function AddTransaction({
             >
               Total: {totalAmount}
             </p>
-          )}
-
+          )} */}
+          <></>
           <div
             onClick={() => {
               toggleModal(true);
@@ -171,9 +171,18 @@ export default function AddTransaction({
       {/* {txns?.map((txn) => (
         <Transaction txn={txn} />
       ))} */}
-      <DataGridTable rows={rows} columns={columns} checkboxSelection={false} />;
+      <DataGridTable
+        bulkActionButtons={false}
+        rows={rows}
+        columns={columns}
+        checkboxSelection={false}
+      />
       {isModalOpen && (
-        <CustomModal isModalOpen={isModalOpen} toggleModal={toggleModal}>
+        <CustomModal
+          isModalOpen={isModalOpen}
+          toggleModal={toggleModal}
+          heading="Add Transaction"
+        >
           <Stack spacing={2} direction="column">
             <LocalizationProvider
               dateAdapter={AdapterDateFns}
@@ -185,7 +194,15 @@ export default function AddTransaction({
                   inputFormat="MM/dd/yyyy"
                   value={txnDate}
                   onChange={handleChange}
-                  renderInput={(params) => <TextField {...params} />}
+                  renderInput={(params) => (
+                    <TextField
+                      InputLabelProps={{
+                        shrink: true,
+                        style: { color: "#fff" },
+                      }}
+                      {...params}
+                    />
+                  )}
                 />
               </Stack>
             </LocalizationProvider>
@@ -212,6 +229,7 @@ export default function AddTransaction({
               }}
               InputLabelProps={{
                 shrink: true,
+                style: { color: "#fff" },
               }}
             />
             <TextField
@@ -231,6 +249,7 @@ export default function AddTransaction({
               }}
               InputLabelProps={{
                 shrink: true,
+                style: { color: "#fff" },
               }}
             />
             <Stack spacing={2} direction="row">

@@ -23,6 +23,8 @@ export default function Contact({
   setAccountsBalances,
   setAccountsTxns,
   index,
+  setToPay,
+  setToCollect,
 }) {
   const router = useRouter();
   const sheetId = contact?.properties?.sheetId;
@@ -61,23 +63,38 @@ export default function Contact({
       .then((resObj) => resObj.data)
       .then((res) => {
         const abc = [];
+        let toCollect,
+          toPay,
+          accntBal = 0;
         res?.values?.forEach((value) => {
+          if (parseInt(value[1]) > 0) {
+            toCollect += value[1];
+          } else if (parseInt(value[1]) < 0) {
+            toPay += value[1];
+          } else {
+            toCollect += value[1];
+          }
+
           abc.push({
             date: value[0],
             amount: value[1],
           });
         });
         setAccountsTxns((prev) => prev.concat(abc));
+        setToCollect(toCollect);
+        setToPay(toPay);
+        setTotalAmount(accntBal);
+        setAccountsBalances((prev) => [...prev, accntBal]);
 
-        const total = res?.values?.reduce(
-          (previousValue, currentValue) =>
-            previousValue + parseInt(currentValue[1]),
-          0
-        );
-        if (total) {
-          setTotalAmount(total);
-          setAccountsBalances((prev) => [...prev, total]);
-        }
+        // const total = res?.values?.reduce(
+        //   (previousValue, currentValue) =>
+        //     previousValue + parseInt(currentValue[1]),
+        //   0
+        // );
+        // if (total) {
+        //   setTotalAmount(total);
+        //   setAccountsBalances((prev) => [...prev, total]);
+        // }
       });
   }
 
