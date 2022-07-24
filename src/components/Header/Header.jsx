@@ -87,8 +87,7 @@ export default function Header() {
                     <MenuItem onClick={handleClose}>My account</MenuItem>
                     <MenuItem
                       onClick={() => {
-                        signOut();
-                        router.push("login");
+                        signOut("google");
                       }}
                     >
                       Logout

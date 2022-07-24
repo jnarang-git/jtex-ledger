@@ -1,12 +1,18 @@
 import { SessionProvider } from "next-auth/react";
+import { useRouter } from "next/router";
 import Layout from "../src/components/Layout";
 
 function App({ Component, pageProps: { session, ...pageProps } }) {
+  const router = useRouter();
   return (
     <SessionProvider session={session}>
-      <Layout>
+      {!router.pathname?.includes("/login") ? (
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      ) : (
         <Component {...pageProps} />
-      </Layout>
+      )}
     </SessionProvider>
   );
 }
