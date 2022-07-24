@@ -126,10 +126,13 @@ export default function AccountsList({ setFirmBalance, setMonthSale }) {
       </div>
       <SearchBar handleAccountSearch={handleAccountSearch} />
       {filteredAccounts?.map((contact, index) => (
-        <Stack spacing={2} direction="column">
+        <Stack
+          key={contact?.properties?.sheetId}
+          spacing={2}
+          direction="column"
+        >
           <Contact
             index={index}
-            key={contact?.properties?.sheetId}
             contact={contact}
             spreadsheetsId={spreadsheetsId}
             token={token}

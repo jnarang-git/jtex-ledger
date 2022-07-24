@@ -16,9 +16,10 @@ export default function AccountsPage() {
   return (
     <div className={styles.accountPageContainer}>
       <div className={styles.headerContainer}>
-        <div className={styles.logo}>
-          <Image src={Logo} width="120" height="50" />
-        </div>
+        <p className={styles.logo}>
+          {/* <Image src={Logo} width="120" height="50" /> */}
+          E-Khata
+        </p>
         <Header />
       </div>
       <div className={styles.summaryContainer}>

@@ -104,7 +104,10 @@
 }
 
 .logo {
-  height: 1em;
+  font-size: 1.5rem;
+  font-family: cursive;
+
+  // height: 1em;
   margin-left: 0.5rem;
 }
 
@@ -126,6 +129,7 @@
   .headerContainer {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     .logo {
       margin-left: 1rem;
     }
