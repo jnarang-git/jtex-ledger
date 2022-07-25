@@ -7,21 +7,21 @@ export default function SummaryButton({
   topLabel,
   bottomLabel,
   color,
-  upArrowIcon,  
+  upArrowIcon,
   downArrayIcon,
 }) {
   return (
     <div
       className={styles.toRecieveContainer}
-      style={{ backgroundColor: color }}
+      style={{ backgroundColor: color ?? "#5d5da1" }}
     >
       <div className={styles.leftSection}>
         <section className={styles.amount}>
-          <CurrencyRupeeIcon fontSize="small" /> <span>{topLabel}</span>
+          <CurrencyRupeeIcon fontSize="small" /> <span>{topLabel || ""}</span>
         </section>
         <section className={`${styles.amount} ${styles.recievedLabel}`}>
           <p>{bottomLabel}</p>
-            {/* {downArrayIcon && <ArrowDownwardIcon />}
+          {/* {downArrayIcon && <ArrowDownwardIcon />}
             {upArrowIcon && <ArrowUpwardIcon />} */}
         </section>
       </div>

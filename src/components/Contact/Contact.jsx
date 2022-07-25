@@ -17,7 +17,6 @@ import {
 import { Avatar } from "@mui/material";
 export default function Contact({
   contact,
-  spreadsheetsId,
   token,
   getAccounts,
   setAccountsBalances,
@@ -31,7 +30,9 @@ export default function Contact({
   const [totalAmount, setTotalAmount] = React.useState("");
   async function handleDeleteSheet() {
     await axios.post(
-      `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetsId}:batchUpdate`,
+      `https://sheets.googleapis.com/v4/spreadsheets/${localStorage.getItem(
+        "khataId"
+      )}:batchUpdate`,
       {
         requests: [
           {
@@ -53,7 +54,9 @@ export default function Contact({
     const sheetName = contact?.properties?.title;
     await axios
       .get(
-        `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetsId}/values/${sheetName}!A2:B`,
+        `https://sheets.googleapis.com/v4/spreadsheets/${localStorage.getItem(
+          "khataId"
+        )}/values/${sheetName}!A2:B`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -68,11 +71,13 @@ export default function Contact({
           accntBal = 0;
         res?.values?.forEach((value) => {
           if (parseInt(value[1]) > 0) {
-            toCollect += value[1];
+            toCollect += parseInt(value[1]);
+            accntBal += parseInt(value[1]);
           } else if (parseInt(value[1]) < 0) {
-            toPay += value[1];
+            toPay += parseInt(value[1]);
+            accntBal += parseInt(value[1]);
           } else {
-            toCollect += value[1];
+            accntBal += parseInt(value[1]);
           }
 
           abc.push({
@@ -97,7 +102,7 @@ export default function Contact({
         // }
       });
   }
-
+  console.log("totalAmount", totalAmount);
   React.useEffect(() => {
     getAmount();
   }, []);
@@ -139,12 +144,10 @@ export default function Contact({
               <sub>{totalAmount ? "(Dena)" : ""}</sub>
             </p>
           ) : (
-            (
-              <p>
-                <span>{Math.abs(totalAmount) || "No dues"}</span>
-                <sub>{totalAmount ? "(Lena)" : ""}</sub>
-              </p>
-            ) || "No dues"
+            <p>
+              <span>{Math.abs(totalAmount) || "No dues"}</span>
+              <sub>{totalAmount ? "(Lena)" : ""}</sub>
+            </p>
           )}
         </p>
         {/* <div

@@ -98,6 +98,7 @@ export default function Header({ name }) {
                     <MenuItem
                       onClick={() => {
                         signOut("google");
+                        localStorage.clear();
                       }}
                     >
                       Logout

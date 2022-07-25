@@ -8,9 +8,9 @@ export default function AccountsPage() {
   const [firmBalance, setFirmBalance] = React.useState(0);
   const [toCollect, setToCollect] = React.useState(0);
   const [toPay, setToPay] = React.useState(0);
+  const [showStats, setShowStats] = React.useState(true);
   const [monthSale, setMonthSale] = React.useState(0);
   const { data: session } = useSession();
-  console.log(session);
   return (
     <div className={styles.accountPageContainer}>
       <div className={styles.headerContainer}>
@@ -22,30 +22,30 @@ export default function AccountsPage() {
       </div>
       <div
         className={`${styles.summaryContainer} ${
-          false ? styles.show : styles.hide
+          showStats ? styles.show : styles.hide
         }`}
       >
         <SummaryButton
           topLabel={toCollect}
           bottomLabel="LENE HAI"
-          color="#b7deb7"
+          // color="#b7deb7"
           downArrayIcon
         />
         <SummaryButton
           topLabel={toPay}
           bottomLabel="DENE HAI"
-          color="#e3c1c1"
+          // color="#e3c1c1"
           upArrowIcon
         />
         <SummaryButton
           topLabel={firmBalance}
           bottomLabel="Net Balance"
-          color={firmBalance > 0 ? "#b7deb7" : "#e3c1c1"}
+          // color={firmBalance > 0 ? "#b7deb7" : "#e3c1c1"}
         />{" "}
         <SummaryButton
           topLabel={monthSale}
           bottomLabel="This week sale"
-          color={monthSale >= 200000 ? "#b7deb7" : "#e3c1c1"}
+          // color={monthSale >= 200000 ? "#b7deb7" : "#e3c1c1"}
         />
       </div>
       <AccountsList
@@ -53,6 +53,7 @@ export default function AccountsPage() {
         setMonthSale={setMonthSale}
         setToCollect={setToCollect}
         setToPay={setToPay}
+        setShowStats={setShowStats}
       />
     </div>
   );
