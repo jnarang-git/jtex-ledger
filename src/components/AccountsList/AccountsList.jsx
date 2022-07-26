@@ -239,7 +239,7 @@ export default function AccountsList({
             <p className={styles.addCustomerLabel}>Khata Khol</p>
           </Button>
           <p className={styles.noRecordFound}>
-            Don't have khata? Don't worry click below to open a new Khata.
+            {`Don't have khata? Don't worry click below to open a new Khata.`}
           </p>
 
           <Button
