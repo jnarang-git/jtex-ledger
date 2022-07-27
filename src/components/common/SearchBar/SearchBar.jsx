@@ -13,6 +13,7 @@ export default function SearchBar({ handleAccountSearch, setShowStats }) {
       //   component="form"
       sx={{
         p: "2px 4px",
+        // m:"5px 0px",
         display: "flex",
         alignItems: "center",
         backgroundColor: "#5d5da1",

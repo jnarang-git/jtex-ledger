@@ -19,7 +19,7 @@ import {
   indigo,
   lime,
 } from "@mui/material/colors";
-
+import RefreshIcon from "@mui/icons-material/Cached";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import { useRouter } from "next/router";
 import { useLoader } from "../../customHooks/useLoader";
@@ -30,13 +30,8 @@ export default function KhaatasList({}) {
   const token = session?.accessToken;
   const [khaatas, setKhaatas] = React.useState([]);
   const [filteredKhaatas, setFilteredKhaatas] = React.useState([]);
-  const [isModalOpen, toggleModal] = React.useState(false);
   const [isAddKhataOpen, toggleKhataModal] = React.useState(false);
-  const [accountName, setAccountName] = React.useState("");
   const [khataName, setKhataName] = React.useState("");
-  const [khataId, setKhataId] = React.useState("");
-  const [accountsBalances, setAccountsBalances] = React.useState([]);
-  const [accountsTxns, setAccountsTxns] = React.useState([]);
   const { loader, showLoader, hideLoader } = useLoader();
   React.useEffect(() => {
     getKhatas();
@@ -55,26 +50,27 @@ export default function KhaatasList({}) {
       )
       .then((resObj) => resObj.data)
       .then((res) => {
-        setKhaatas(res?.values);
-        setFilteredKhaatas(res?.values);
+        setKhaatas(res?.values?.sort());
+        setFilteredKhaatas(res?.values?.sort());
       })
       .catch();
     hideLoader();
   }
+  console.log("filteredKhaatas", filteredKhaatas);
 
   function handleAccountSearch(searchTerm) {
     setFilteredKhaatas(
       searchTerm?.length
         ? filteredKhaatas?.filter((accnt) =>
-            accnt?.properties?.title
-              ?.toLowerCase()
-              ?.includes(searchTerm?.toLowerCase())
+            accnt[0]?.toLowerCase()?.includes(searchTerm?.toLowerCase())
           )
         : khaatas
     );
   }
   // Create Spreadsheet API
   async function handleAddKhata() {
+    toggleKhataModal(false);
+
     showLoader();
     const addSheetResponse = await axios
       .post(
@@ -100,7 +96,7 @@ export default function KhaatasList({}) {
       .then((res) => res.data)
       .catch(() => {});
 
-    if (addSheetResponse?.spreadsheetId)
+    if (addSheetResponse?.spreadsheetId) {
       await axios
         .post(
           `https://sheets.googleapis.com/v4/spreadsheets/1iRjFMaCcqV4A6GZIko5hYG22pYInMsd-WlLRfKlrqnY/values/SheetsMapping!A2:B:append?valueInputOption=USER_ENTERED`,
@@ -116,9 +112,9 @@ export default function KhaatasList({}) {
           }
         )
         .catch(() => {});
+    }
     hideLoader();
     getKhatas();
-    toggleKhataModal(false);
     setKhataName("");
   }
 
@@ -151,24 +147,33 @@ export default function KhaatasList({}) {
         </Stack>
       ) : (
         <>
-          <div className={styles.addCustomerContainer}>
-            <p className={styles.accountsLabel}>Khaate</p>
-            <Button
-              size="large"
-              style={{
-                backgroundColor: "#5d5da1",
-              }}
-              variant="contained"
-              className={styles.addCustomerButton}
-              onClick={() => {
-                toggleModal(true);
-              }}
-            >
-              <PersonAddIcon />
-              {/* <p className={styles.addCustomerLabel}>Add</p> */}
-            </Button>
-          </div>
-          <SearchBar handleAccountSearch={handleAccountSearch} />
+          <Stack spacing={2} direction="column" sx={{ my: 2 }}>
+            <div className={styles.addCustomerContainer}>
+              <div className={styles.khaateLabel}>
+                <span className={styles.accountsLabel}>Khaate</span>
+                <RefreshIcon
+                  onClick={() => {
+                    getKhatas();
+                  }}
+                />
+              </div>
+              <Button
+                size="large"
+                style={{
+                  backgroundColor: "#5d5da1",
+                }}
+                variant="contained"
+                className={styles.addCustomerButton}
+                onClick={() => {
+                  toggleKhataModal(true);
+                }}
+              >
+                <PersonAddIcon />
+                {/* <p className={styles.addCustomerLabel}>Add</p> */}
+              </Button>
+            </div>
+            <SearchBar handleAccountSearch={handleAccountSearch} />
+          </Stack>
           {filteredKhaatas?.length ? (
             filteredKhaatas?.map((khata, index) => (
               <Stack key={khata[0]} spacing={2} direction="column">
@@ -186,7 +191,7 @@ export default function KhaatasList({}) {
                           bgcolor: COLORS[index % 4][500],
                         }}
                       >
-                        {khata[0].charAt(0)}
+                        {khata?.length ? khata[0].charAt(0) : ""}
                       </Avatar>
                       <span className={styles.contactName}>{khata[0]}</span>
                     </p>
@@ -199,7 +204,7 @@ export default function KhaatasList({}) {
           )}
         </>
       )}
-      {isModalOpen && (
+      {/* {isModalOpen && (
         <CustomModal
           isModalOpen={isModalOpen}
           toggleModal={toggleModal}
@@ -211,13 +216,13 @@ export default function KhaatasList({}) {
               id="outlined-number"
               label="Account name"
               autoComplete="off"
-              value={accountName}
+              value={khataName}
               onChange={(e) => {
-                setAccountName(e.target.value);
+                setKhataName(e.target.value);
               }}
               onKeyDown={(e) => {
-                if (accountName?.length && e.key === "Enter") {
-                  handleAddAcount();
+                if (khataName?.length && e.key === "Enter") {
+                  handleAddKhata();
                 }
               }}
               InputLabelProps={{
@@ -230,7 +235,7 @@ export default function KhaatasList({}) {
                 variant="contained"
                 onClick={() => {
                   toggleModal(false);
-                  setAccountName("");
+                  setKhataName("");
                 }}
                 style={{
                   backgroundColor: "#5d5da1",
@@ -240,10 +245,10 @@ export default function KhaatasList({}) {
               </Button>
               &nbsp; &nbsp;
               <Button
-                disabled={!accountName?.length}
+                disabled={!khataName?.length}
                 variant="contained"
                 onClick={() => {
-                  handleAddAcount();
+                  handleAddKhata();
                 }}
               >
                 Add
@@ -251,7 +256,7 @@ export default function KhaatasList({}) {
             </Stack>
           </Stack>
         </CustomModal>
-      )}
+      )} */}
       {isAddKhataOpen && (
         <CustomModal
           isModalOpen={true}

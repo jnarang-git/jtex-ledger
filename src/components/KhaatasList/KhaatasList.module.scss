@@ -27,6 +27,7 @@
 .accountsLabel {
   font-size: 1.8rem;
   margin-left: 1rem;
+  margin-right: .5rem;
 }
 
 .noRecordFound {
@@ -35,7 +36,7 @@
 }
 
 .contactContainer {
-  height: 3.5rem;
+  height: 2.5rem;
   margin-top: 1rem;
   .sectionContainer {
     display: flex;
@@ -72,4 +73,9 @@
 }
 .grey {
   color: grey;
+}
+
+.khaateLabel{
+  display: flex;
+  align-items: center;
 }
