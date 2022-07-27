@@ -13,13 +13,7 @@ export default function AccountsPage() {
   const { data: session } = useSession();
   return (
     <div className={styles.accountPageContainer}>
-      <div className={styles.headerContainer}>
-        <p className={styles.logo}>
-          {/* <Image src={Logo} width="120" height="50" /> */}
-          E-Khata
-        </p>
-        <Header name={session?.user?.name} />
-      </div>
+      <Header name={session?.user?.name} />
       <div
         className={`${styles.summaryContainer} ${
           showStats ? styles.show : styles.hide

@@ -28,10 +28,10 @@ export default function SearchBar({ handleAccountSearch, setShowStats }) {
           handleAccountSearch(e.target.value);
         }}
         onFocus={() => {
-          setShowStats(false);
+          if (setShowStats) setShowStats(false);
         }}
         onBlur={() => {
-          setShowStats(true);
+          if (setShowStats) setShowStats(true);
         }}
       />
       <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">

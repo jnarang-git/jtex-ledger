@@ -6,7 +6,7 @@ export default function Login({ providers }) {
   const { data: session } = useSession();
   const router = useRouter();
   if (session) {
-    router.push("/accounts");
+    router.push("/");
     return null;
   }
   return (

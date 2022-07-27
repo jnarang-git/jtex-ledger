@@ -1,0 +1,75 @@
+.createNewAccount {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+}
+.field {
+  width: 100%;
+}
+.green {
+  color: green;
+}
+.red {
+  color: red;
+}
+.addCustomerContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .addCustomerButton {
+    // margin-right: 1rem;
+  }
+  .addCustomerLabel {
+    margin-left: 0.5rem;
+  }
+}
+.accountsLabel {
+  font-size: 1.8rem;
+  margin-left: 1rem;
+}
+
+.noRecordFound {
+  font-size: 1.2rem;
+  padding-left: 0.5rem;
+}
+
+.contactContainer {
+  height: 3.5rem;
+  margin-top: 1rem;
+  .sectionContainer {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 2rem 0 0.5rem;
+    font-size: 20px;
+    align-items: center;
+    .contactNameSection {
+      display: flex;
+      margin: 0;
+
+      align-items: center;
+      .avatar {
+        border-radius: 50%;
+        padding: 10px 18px;
+        margin: 0 10px;
+      }
+      .contactName {
+        margin-left: 0.5rem;
+      }
+    }
+    .amount {
+      font-size: 20px;
+      margin: 0;
+    }
+  }
+}
+
+.green {
+  color: green;
+}
+.red {
+  color: red;
+}
+.grey {
+  color: grey;
+}

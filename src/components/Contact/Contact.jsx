@@ -24,10 +24,13 @@ export default function Contact({
   index,
   setToPay,
   setToCollect,
+  spreadsheetId,
 }) {
   const router = useRouter();
   const sheetId = contact?.properties?.sheetId;
   const [totalAmount, setTotalAmount] = React.useState("");
+
+  // Delete Sheet API
   async function handleDeleteSheet() {
     await axios.post(
       `https://sheets.googleapis.com/v4/spreadsheets/${localStorage.getItem(
@@ -50,13 +53,13 @@ export default function Contact({
     );
     getAccounts();
   }
+
+  //  Get Values API
   async function getAmount() {
     const sheetName = contact?.properties?.title;
     await axios
       .get(
-        `https://sheets.googleapis.com/v4/spreadsheets/${localStorage.getItem(
-          "khataId"
-        )}/values/${sheetName}!A2:B`,
+        `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${sheetName}!A2:B`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -102,17 +105,18 @@ export default function Contact({
         // }
       });
   }
-  console.log("totalAmount", totalAmount);
+
   React.useEffect(() => {
     getAmount();
   }, []);
+
   const COLORS = [deepOrange, deepPurple, lightBlue, indigo];
   return (
     <main
       className={styles.contactContainer}
       onClick={() =>
         router.push(
-          `/add-transaction?sheetName=${contact?.properties?.title}&sheetId=${contact?.properties?.sheetId}`
+          `/add-transaction?spreadsheetId=${spreadsheetId}&sheetName=${contact?.properties?.title}&sheetId=${contact?.properties?.sheetId}`
         )
       }
     >

@@ -10,6 +10,7 @@ import Stack from "@mui/material/Stack";
 import { Avatar } from "@mui/material";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/router";
+import styles from "./Header.module.scss";
 
 export default function Header({ name }) {
   const [open, setOpen] = React.useState(false);
@@ -47,69 +48,75 @@ export default function Header({ name }) {
   }, [open]);
 
   return (
-    <Stack direction="row" spacing={2}>
-      <div>
-        <Button
-          ref={anchorRef}
-          id="composition-button"
-          aria-controls={open ? "composition-menu" : undefined}
-          aria-expanded={open ? "true" : undefined}
-          aria-haspopup="true"
-          onClick={handleToggle}
-        >
-          <Avatar
-            sx={{
-              bgcolor: "#5d5da1",
-            }}
+    <div className={styles.headerContainer}>
+      <p className={styles.logo}>
+        {/* <Image src={Logo} width="120" height="50" /> */}
+        E-Khata
+      </p>
+      <Stack direction="row" spacing={2}>
+        <div>
+          <Button
+            ref={anchorRef}
+            id="composition-button"
+            aria-controls={open ? "composition-menu" : undefined}
+            aria-expanded={open ? "true" : undefined}
+            aria-haspopup="true"
+            onClick={handleToggle}
           >
-            {name?.charAt(0)}
-          </Avatar>
-        </Button>
-        <Popper
-          open={open}
-          anchorEl={anchorRef.current}
-          role={undefined}
-          placement="bottom-start"
-          transition
-          // disablePortal
-        >
-          {({ TransitionProps, placement }) => (
-            <Grow
-              {...TransitionProps}
-              style={{
-                transformOrigin:
-                  placement === "bottom-start" ? "left top" : "left bottom",
+            <Avatar
+              sx={{
+                bgcolor: "#5d5da1",
               }}
             >
-              <Paper
-                sx={{
-                  backgroundColor: "#5d5da1",
+              {name?.charAt(0)}
+            </Avatar>
+          </Button>
+          <Popper
+            open={open}
+            anchorEl={anchorRef.current}
+            role={undefined}
+            placement="bottom-start"
+            transition
+            // disablePortal
+          >
+            {({ TransitionProps, placement }) => (
+              <Grow
+                {...TransitionProps}
+                style={{
+                  transformOrigin:
+                    placement === "bottom-start" ? "left top" : "left bottom",
                 }}
               >
-                <ClickAwayListener onClickAway={handleClose}>
-                  <MenuList
-                    autoFocusItem={open}
-                    id="composition-menu"
-                    aria-labelledby="composition-button"
-                    onKeyDown={handleListKeyDown}
-                  >
-                    <MenuItem onClick={handleClose}>Profile</MenuItem>
-                    <MenuItem onClick={handleClose}>My account</MenuItem>
-                    <MenuItem
-                      onClick={() => {
-                        signOut("google");
-                        localStorage.clear();
-                      }}
+                <Paper
+                  sx={{
+                    backgroundColor: "#5d5da1",
+                  }}
+                >
+                  <ClickAwayListener onClickAway={handleClose}>
+                    <MenuList
+                      autoFocusItem={open}
+                      id="composition-menu"
+                      aria-labelledby="composition-button"
+                      onKeyDown={handleListKeyDown}
                     >
-                      Logout
-                    </MenuItem>
-                  </MenuList>
-                </ClickAwayListener>
-              </Paper>
-            </Grow>
-          )}
-        </Popper>
-      </div>
-    </Stack>
+                      <MenuItem onClick={handleClose}>Profile</MenuItem>
+                      <MenuItem onClick={handleClose}>My account</MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          signOut("google");
+                          localStorage.clear();
+                        }}
+                      >
+                        Logout
+                      </MenuItem>
+                    </MenuList>
+                  </ClickAwayListener>
+                </Paper>
+              </Grow>
+            )}
+          </Popper>
+        </div>
+      </Stack>
+    </div>
   );
 }

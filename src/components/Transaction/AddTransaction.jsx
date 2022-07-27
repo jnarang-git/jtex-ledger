@@ -17,8 +17,10 @@ import * as React from "react";
 import DataGridTable from "../common/Datagrid/Datagrid";
 import CustomModal from "../Modal/Modal";
 import styles from "./AddTransaction.module.scss";
+import { useLoader } from "../../customHooks/useLoader";
 export default function AddTransaction({
   sheetName,
+  spreadsheetId,
   accountBalanceDetails,
   setAccountBalanceDetails,
 }) {
@@ -35,6 +37,7 @@ export default function AddTransaction({
   const router = useRouter();
   const spreadsheetsId = "1TJrZaCqRLxjdTI085mMR1q20UotXoGyUkl2_yc91bBo";
   const accountNameRef = React.useRef();
+  const { loader, showLoader, hideLoader } = useLoader();
 
   React.useEffect(() => {
     accountNameRef?.current?.focus();
@@ -56,7 +59,10 @@ export default function AddTransaction({
     setTxnDate(newValue);
   };
 
+  // Get Rows from sheet API
+
   async function getAmount() {
+    showLoader();
     await axios
       .get(
         `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetsId}/values/${sheetName}!A2:C`,
@@ -75,14 +81,18 @@ export default function AddTransaction({
           0
         );
         setTotalAmount(total);
-      });
+      })
+      .catch();
+    hideLoader();
   }
   React.useEffect(() => {
     getAmount();
   }, []);
 
+  // ADD Row to sheet API
   async function handleAddTxn() {
     if (txnAmount && txnDate) {
+      showLoader();
       await axios
         .post(
           `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetsId}/values/${sheetName}!A2:C:append?valueInputOption=USER_ENTERED`,
@@ -103,7 +113,9 @@ export default function AddTransaction({
             },
           }
         )
-        .then((res) => res.data);
+        .then((res) => res.data)
+        .catch();
+      hideLoader();
       setTxnAmount("");
 
       toggleModal(false);
@@ -134,7 +146,7 @@ export default function AddTransaction({
     <div className={styles.homepageContainer}>
       <div className={styles.txnHeaderContainer}>
         <div className={`${styles.flex}`}>
-          <div onClick={() => router.push("/accounts")}>
+          <div onClick={() => router.push(`/accounts?sId=${spreadsheetId}`)}>
             <ArrowBackIcon />
           </div>
           <p className={styles.addTransactionLabel}>Trasanctions</p>
@@ -172,6 +184,7 @@ export default function AddTransaction({
         <Transaction txn={txn} />
       ))} */}
       <DataGridTable
+        loading={loader}
         bulkActionButtons={false}
         rows={rows}
         columns={columns}

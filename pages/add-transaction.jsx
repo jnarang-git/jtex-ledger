@@ -4,6 +4,12 @@ import AddTransaction from "../src/components/Transaction/AddTransaction";
 
 export default function AddTransactionPage() {
   const { query } = useRouter();
-  const { sheetName, sheetId } = query;
-  return <AddTransaction sheetName={sheetName} sheetId={sheetId} />;
+  const { sheetName, sheetId, spreadsheetId } = query;
+  return (
+    <AddTransaction
+      sheetName={sheetName}
+      sheetId={sheetId}
+      spreadsheetId={spreadsheetId}
+    />
+  );
 }

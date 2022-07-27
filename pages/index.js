@@ -6,7 +6,7 @@ export default function Home() {
   const { data: session } = useSession();
   useEffect(() => {
     if (session) {
-      router.push("/accounts");
+      router.push("/khaatas");
     } else {
       router.push("/login");
     }
