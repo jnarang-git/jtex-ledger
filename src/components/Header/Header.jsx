@@ -46,10 +46,14 @@ export default function Header({ name }) {
 
     prevOpen.current = open;
   }, [open]);
-
   return (
     <div className={styles.headerContainer}>
-      <p className={styles.logo}>
+      <p
+        className={styles.logo}
+        onClick={() => {
+          router.push("/khaatas");
+        }}
+      >
         {/* <Image src={Logo} width="120" height="50" /> */}
         E-Khata
       </p>
