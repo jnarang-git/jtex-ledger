@@ -82,6 +82,7 @@ export default function AccountsList({
         hideLoader();
       })
       .catch();
+    hideLoader();
   }
 
   // Add Sheet API
