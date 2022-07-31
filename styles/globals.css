@@ -19,3 +19,18 @@ a {
   font-family: Poppins;
   /* color: white !important; */
 }
+p,
+h2,
+button,
+input,
+span,
+svg {
+  color: white !important;
+}
+
+.css-1ysjrvj-MuiStack-root,
+.MuiDataGrid-columnHeaderTitle,
+.css-1jbbcbn-MuiDataGrid-columnHeaderTitle,
+.MuiDataGrid-cellContent {
+  color: white !important;
+}
