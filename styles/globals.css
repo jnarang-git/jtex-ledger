@@ -21,10 +21,8 @@ a {
 }
 p,
 h2,
-button,
-input,
-span,
-svg {
+input
+{
   color: white !important;
 }
 
