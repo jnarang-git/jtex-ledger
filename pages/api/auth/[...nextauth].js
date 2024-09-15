@@ -5,15 +5,12 @@ let SCOPES = [];
 SCOPES.push("https://www.googleapis.com/auth/drive");
 SCOPES.push("https://www.googleapis.com/auth/spreadsheets");
 let a = SCOPES.join(" ");
-const clientId =
-  "1061389835335-084ce2v3bo3mlh64o6do3ldnbe21aqc5.apps.googleusercontent.com";
-const clientSecret = "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";
 
 export default NextAuth({
   providers: [
     GoogleProvider({
-      clientId: clientId,
-      clientSecret: clientSecret,
+      clientId: process.env.CLIENT_ID,
+      clientSecret: process.env.CLIENT_SECRET,
       authorization: {
         params: {
           scope:
