@@ -48,7 +48,7 @@ export default function Header({ name }) {
   }, [open]);
   return (
     <div className={styles.headerContainer}>
-      <p
+      <button
         className={styles.logo}
         onClick={() => {
           router.push("/khaatas");
@@ -56,7 +56,7 @@ export default function Header({ name }) {
       >
         {/* <Image src={Logo} width="120" height="50" /> */}
         E-Khata
-      </p>
+      </button>
       <Stack direction="row" spacing={2}>
         <div>
           <Button
